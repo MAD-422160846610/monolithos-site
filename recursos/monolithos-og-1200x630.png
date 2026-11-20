@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>MonolithOS · Claridad y control.</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@1,400&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1200px;
+      height: 630px;
+      background: #0B0E14;
+      color: #F8F9FA;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 120px; /* espacio libre = altura de la M aprox */
+      font-smoothing: antialiased;
+    }
+    .contenido {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .firma {
+      width: 380px;
+      height: auto;
+    }
+    .lema {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      color: #F8F9FA;
+    }
+    .descriptor {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 1.4;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #3E4C59;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenido">
+    <img class="firma" src="../monolithos-firma-oscuro.svg" alt="MonolithOS" aria-hidden="true">
+    <p class="lema">Claridad y control.</p>
+    <p class="descriptor">PMO · INTELIGENCIA ARTIFICIAL · GOBERNANZA LEGAL</p>
+  </div>
+</body>
+</html>

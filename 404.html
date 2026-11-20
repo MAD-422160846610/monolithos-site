@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Esta página no existe · MonolithOS</title>
+  <meta name="description" content="La página que buscas no existe.">
+  <meta name="theme-color" content="#F8F9FA" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B0E14" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://monoglith.online/404.html">
+  <link rel="icon" type="image/svg+xml" href="recursos/favicon.svg">
+  <link rel="apple-touch-icon" href="recursos/apple-touch-icon.png">
+  <script>(function(){var d=document.documentElement;d.setAttribute('lang','es');try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion')}}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@1,400&display=swap">
+  <style>
+:root{
+  --piedra:#F8F9FA; --cantera:#EDEFF2; --papel:#FFFFFF; --tinta:#0B0E14; --gris:#3E4C59; --veta:#D3D9E0; --ambar:#D97706; --sobre-ambar:#0B0E14;
+  --senal:#047857; --senal-fondo:#DCF2E8; --decide:#9A5200; --decide-fondo:#FBEFD9;
+  --vidrio:rgba(248,249,250,.78);
+  --display:"Space Grotesk",Arial,system-ui,sans-serif;
+  --texto:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace; --serif:"Newsreader",Georgia,serif;
+  --r:0px; --gut:20px; --alto-cab:56px;
+}
+@media (min-width:700px){:root{--gut:32px; --alto-cab:64px}}
+@media (min-width:1100px){:root{--gut:clamp(40px,4.4vw,64px)}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
+  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
+  --vidrio:rgba(11,14,20,.78); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
+  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
+  --vidrio:rgba(11,14,20,.78); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(var(--alto-cab) + 16px);-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--piedra);color:var(--tinta);font-family:var(--texto);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+svg{display:block}
+a{color:inherit}
+p,dl,dd,figure{margin:0}
+[hidden]{display:none!important}
+h1,h2,h3{margin:0;font-weight:inherit}
+p{text-wrap:pretty}
+.envoltura{width:100%;max-width:1280px;margin-inline:auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.saltar{position:absolute;left:12px;top:-80px;z-index:100;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--tinta);color:var(--piedra);font-family:var(--mono);font-size:13px;text-decoration:none}
+.saltar:focus{top:12px}
+
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:var(--r);border:1px solid var(--tinta);background:transparent;color:var(--tinta);font-family:var(--texto);font-weight:600;font-size:16px;line-height:1.2;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s ease,opacity .1s ease}
+.boton:active{opacity:.72}
+.boton.lleno{background:var(--ambar);border-color:var(--ambar);color:var(--sobre-ambar)}
+.boton.chico{min-height:44px;padding:0 16px;font-size:15px}
+@media (hover:hover){
+  .boton:hover{background:color-mix(in srgb,var(--tinta) 7%,transparent)}
+  .boton.lleno:hover{background:color-mix(in srgb,var(--ambar) 88%,var(--sobre-ambar))}
+}
+
+.cabecera{position:sticky;top:0;z-index:50;background:var(--vidrio);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--veta)}
+@media (prefers-reduced-transparency: reduce){.cabecera{background:var(--piedra);-webkit-backdrop-filter:none;backdrop-filter:none}}
+.cabecera-fila{display:flex;align-items:center;justify-content:space-between;gap:16px;height:var(--alto-cab)}
+.marca{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--tinta)}
+.marca svg{display:block;height:24px;width:auto}.marca .m-tinta{fill:var(--tinta)}.marca .m-os{fill:var(--gris)}
+.menu{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;background:var(--piedra);border-block:1px solid var(--veta);padding:4px max(var(--gut),env(safe-area-inset-right,0px)) 24px max(var(--gut),env(safe-area-inset-left,0px))}
+.menu.abierto{display:flex}
+.menu a:not(.boton){display:flex;align-items:center;min-height:52px;font-size:17px;text-decoration:none;border-bottom:1px solid var(--veta)}
+.menu .boton{margin-top:20px;min-height:48px;font-size:16px}
+@media (min-width:960px){
+  .cabecera .abrir-menu{display:none}
+  .marca svg{height:28px}
+  .menu{display:flex;position:static;flex-direction:row;align-items:center;gap:2px;background:none;border:0;padding:0}
+  .menu a:not(.boton){display:inline-flex;min-height:44px;padding:0 12px;font-size:15px;border-bottom:0}
+  .menu .boton{margin:0 0 0 10px;min-height:44px;font-size:15px}
+}
+@media (min-width:960px) and (hover:hover){.menu a:not(.boton):hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}}
+
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10.2vw,60px);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
+
+.pie{border-top:1px solid var(--veta);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-family:var(--mono);font-size:12px;color:var(--gris)}
+.pie-fila{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <header class="cabecera">
+    <div class="envoltura cabecera-fila">
+      <a class="marca" href="/" aria-label="MonolithOS, inicio"><svg viewBox="0 0 730.655 140" aria-hidden="true"><path class="m-tinta" d="M0 0 L47.727 27.555 L95.455 0 L95.455 22.044 L47.727 49.6 L0 22.044 Z M0 33.066 L25.455 47.763 L25.455 140 L0 140 Z M35 53.274 L47.727 60.622 L60.455 53.274 L60.455 140 L35 140 Z M70 47.763 L95.455 33.066 L95.455 140 L70 140 Z"/><path class="m-tinta" d="M144.455 105V35H168.955L181.055 96H182.855L194.955 35H219.455V105H206.655V44.7H204.855L192.855 105H171.055L159.055 44.7H157.255V105Z M260.655 106.4Q253.255 106.4 247.355 103.4Q241.455 100.4 238.055 94.7Q234.655 89 234.655 81V79.4Q234.655 71.4 238.055 65.7Q241.455 60 247.355 57Q253.255 54 260.655 54Q268.055 54 273.955 57Q279.855 60 283.255 65.7Q286.655 71.4 286.655 79.4V81Q286.655 89 283.255 94.7Q279.855 100.4 273.955 103.4Q268.055 106.4 260.655 106.4ZM260.655 95.2Q266.455 95.2 270.255 91.45Q274.055 87.7 274.055 80.7V79.7Q274.055 72.7 270.305 68.95Q266.555 65.2 260.655 65.2Q254.855 65.2 251.055 68.95Q247.255 72.7 247.255 79.7V80.7Q247.255 87.7 251.055 91.45Q254.855 95.2 260.655 95.2Z M302.255 105V55.4H314.655V61.9H316.455Q317.655 59.3 320.955 56.95Q324.255 54.6 330.955 54.6Q336.755 54.6 341.105 57.25Q345.455 59.9 347.855 64.55Q350.255 69.2 350.255 75.4V105H337.655V76.4Q337.655 70.8 334.905 68Q332.155 65.2 327.055 65.2Q321.255 65.2 318.055 69.05Q314.855 72.9 314.855 79.8V105Z M391.455 106.4Q384.055 106.4 378.155 103.4Q372.255 100.4 368.855 94.7Q365.455 89 365.455 81V79.4Q365.455 71.4 368.855 65.7Q372.255 60 378.155 57Q384.055 54 391.455 54Q398.855 54 404.755 57Q410.655 60 414.055 65.7Q417.455 71.4 417.455 79.4V81Q417.455 89 414.055 94.7Q410.655 100.4 404.755 103.4Q398.855 106.4 391.455 106.4ZM391.455 95.2Q397.255 95.2 401.055 91.45Q404.855 87.7 404.855 80.7V79.7Q404.855 72.7 401.105 68.95Q397.355 65.2 391.455 65.2Q385.655 65.2 381.855 68.95Q378.055 72.7 378.055 79.7V80.7Q378.055 87.7 381.855 91.45Q385.655 95.2 391.455 95.2Z M433.055 105V35H445.655V105Z M463.655 105V55.4H476.255V105ZM469.955 49.6Q466.555 49.6 464.205 47.4Q461.855 45.2 461.855 41.6Q461.855 38 464.205 35.8Q466.555 33.6 469.955 33.6Q473.455 33.6 475.755 35.8Q478.055 38 478.055 41.6Q478.055 45.2 475.755 47.4Q473.455 49.6 469.955 49.6Z M513.255 105Q508.355 105 505.305 101.95Q502.255 98.9 502.255 93.8V65.8H489.855V55.4H502.255V40H514.855V55.4H528.455V65.8H514.855V91.6Q514.855 94.6 517.655 94.6H527.255V105Z M543.855 105V35H556.455V61.5H558.255Q559.055 59.9 560.755 58.3Q562.455 56.7 565.305 55.65Q568.155 54.6 572.555 54.6Q578.355 54.6 582.705 57.25Q587.055 59.9 589.455 64.55Q591.855 69.2 591.855 75.4V105H579.255V76.4Q579.255 70.8 576.505 68Q573.755 65.2 568.655 65.2Q562.855 65.2 559.655 69.05Q556.455 72.9 556.455 79.8V105Z M636.055 106.4Q623.155 106.4 615.555 99.15Q607.955 91.9 607.955 78.2V61.8Q607.955 48.1 615.555 40.85Q623.155 33.6 636.055 33.6Q648.955 33.6 656.605 40.85Q664.255 48.1 664.255 61.8V78.2Q664.255 91.9 656.605 99.15Q648.955 106.4 636.055 106.4ZM636.055 96.7Q644.355 96.7 648.855 91.85Q653.355 87 653.355 78.6V61.4Q653.355 53 648.855 48.15Q644.355 43.3 636.055 43.3Q627.955 43.3 623.355 48.15Q618.755 53 618.755 61.4V78.6Q618.755 87 623.355 91.85Q627.955 96.7 636.055 96.7Z M704.855 106.4Q696.955 106.4 690.855 103.6Q684.755 100.8 681.305 95.35Q677.855 89.9 677.855 82.1V79.6H688.555V82.1Q688.555 89.5 693.005 93.2Q697.455 96.9 704.855 96.9Q712.355 96.9 716.155 93.75Q719.955 90.6 719.955 85.6Q719.955 82.3 718.155 80.2Q716.355 78.1 713.055 76.85Q709.755 75.6 705.155 74.5L701.455 73.6Q694.755 72 689.805 69.65Q684.855 67.3 682.155 63.4Q679.455 59.5 679.455 53.4Q679.455 47.2 682.505 42.8Q685.555 38.4 690.955 36Q696.355 33.6 703.655 33.6Q710.955 33.6 716.705 36.1Q722.455 38.6 725.755 43.5Q729.055 48.4 729.055 55.8V59.4H718.355V55.8Q718.355 51.3 716.505 48.5Q714.655 45.7 711.355 44.4Q708.055 43.1 703.655 43.1Q697.255 43.1 693.705 45.75Q690.155 48.4 690.155 53.1Q690.155 56.3 691.705 58.35Q693.255 60.4 696.255 61.7Q699.255 63 703.755 64L707.455 64.9Q714.255 66.4 719.455 68.75Q724.655 71.1 727.655 75.1Q730.655 79.1 730.655 85.4Q730.655 91.7 727.505 96.4Q724.355 101.1 718.555 103.75Q712.755 106.4 704.855 106.4Z"/></svg></a>
+      <button type="button" class="boton chico abrir-menu" id="abrir-menu" aria-expanded="false" aria-controls="menu">Menú</button>
+      <nav class="menu" id="menu" aria-label="Secciones">
+        <a class="subraya" href="/#que-instalamos">Qué instalamos</a>
+        <a class="subraya" href="/#como-trabajamos">Cómo trabajamos</a>
+        <a class="subraya" href="/#caso-cero">Caso cero</a>
+        <a class="subraya" href="/#metodo">Método</a>
+        <a class="boton chico lleno" href="/#contacto">Pide una auditoría</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="portada" style="padding-block: 80px 120px; text-align: center;">
+      <div class="envoltura">
+        <h1>Esta página no existe.</h1>
+        <p class="entrada" style="margin-top: 16px; max-width: 40ch; margin-inline: auto;">Lo sentimos, la página que buscas no se encuentra.</p>
+        <a class="boton lleno" href="/" style="margin-top: 24px; display: inline-flex;">Volver al inicio <span class="flecha" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="envoltura pie-fila"><span>MonolithOS · Claridad y control.</span><span>Este sitio no usa cookies ni formularios. Si nos escribes por WhatsApp o correo, usamos tus datos solo para responderte.</span></div>
+  </footer>
+
+  <script>
+  (function(){
+    document.addEventListener('touchstart',function(){},{passive:true});
+    var reduce=false;
+    try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+    var abrir=document.getElementById('abrir-menu'), menu=document.getElementById('menu');
+    function ponerMenu(a){ abrir.setAttribute('aria-expanded',String(a)); menu.classList.toggle('abierto',a); }
+    abrir.addEventListener('click',function(){ ponerMenu(abrir.getAttribute('aria-expanded')!=='true'); });
+    Array.prototype.forEach.call(menu.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ ponerMenu(false); }); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape' && abrir.getAttribute('aria-expanded')==='true'){ ponerMenu(false); abrir.focus(); } });
+  })();
+  </script>
+</body>
+</html>

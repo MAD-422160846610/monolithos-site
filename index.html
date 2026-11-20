@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>MonolithOS · Sistemas de gestión con IA</title>
+  <meta name="description" content="MonolithOS instala sistemas de gestión con IA en empresas dirigidas por su dueño: un solo tablero, reglas escritas y un asistente que hace la ronda.">
+  <meta name="theme-color" content="#F8F9FA" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B0E14" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="MonolithOS · Sistemas de gestión con IA">
+  <meta property="og:description" content="MonolithOS instala sistemas de gestión con IA en empresas dirigidas por su dueño: un solo tablero, reglas escritas y un asistente que hace la ronda.">
+  <meta property="og:image" content="https://monoglith.online/recursos/monolithos-og-1200x630.png">
+  <meta property="og:locale" content="es_VE">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://monoglith.online/">
+  <link rel="icon" type="image/svg+xml" href="recursos/favicon.svg">
+  <link rel="apple-touch-icon" href="recursos/apple-touch-icon.png">
+  <script>(function(){var d=document.documentElement;d.setAttribute('lang','es');try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion')}}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@1,400&display=swap">
+  <style>
+/* Borrador 0.5, pensado primero para teléfono (17-nov-2026).
+   Reglas de apple-design-skill (dickwu) aplicadas a mano sobre la marca aprobada: texto de 17 px y nada por debajo de 11 px,
+   controles de 44 px o más, contraste de 4.5:1 o más, vidrio solo en la cabecera, movimiento breve y opcional,
+   y el diseño cambia por ancho: el teléfono es la base, la tableta empieza en 700 px y el escritorio en 1100 px.
+   Donde Apple y la marca chocan, manda la marca: esquinas rectas, sin sombras y sin degradados.
+   De taste-skill queda la estructura: una sección por pantalla y el tablero en tres vistas (portada, tarjeta abierta y la ronda animada). */
+:root{
+  --piedra:#F8F9FA; --cantera:#EDEFF2; --papel:#FFFFFF; --tinta:#0B0E14; --gris:#3E4C59; --veta:#D3D9E0; --ambar:#D97706; --sobre-ambar:#0B0E14;
+  --senal:#047857; --senal-fondo:#DCF2E8; --decide:#9A5200; --decide-fondo:#FBEFD9;
+  --vidrio:rgba(248,249,250,.78);
+  --display:"Space Grotesk",Arial,system-ui,sans-serif;
+  --texto:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace; --serif:"Newsreader",Georgia,serif;
+  --r:0px; --gut:20px; --alto-cab:56px;
+}
+@media (min-width:700px){:root{--gut:32px; --alto-cab:64px}}
+@media (min-width:1100px){:root{--gut:clamp(40px,4.4vw,64px)}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
+  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
+  --vidrio:rgba(11,14,20,.78); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
+  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
+  --vidrio:rgba(11,14,20,.78); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(var(--alto-cab) + 16px);-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--piedra);color:var(--tinta);font-family:var(--texto);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+svg{display:block}
+a{color:inherit}
+p,dl,dd,figure{margin:0}
+[hidden]{display:none!important}
+h1,h2,h3{margin:0;font-weight:inherit}
+p{text-wrap:pretty}
+.envoltura{width:100%;max-width:1280px;margin-inline:auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.saltar{position:absolute;left:12px;top:-80px;z-index:100;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--tinta);color:var(--piedra);font-family:var(--mono);font-size:13px;text-decoration:none}
+.saltar:focus{top:12px}
+
+/* Botones: sin saltos al pasar el ratón; al tocarlos se aclaran */
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:var(--r);border:1px solid var(--tinta);background:transparent;color:var(--tinta);font-family:var(--texto);font-weight:600;font-size:16px;line-height:1.2;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s ease,opacity .1s ease}
+.boton:active{opacity:.72}
+.boton.lleno{background:var(--ambar);border-color:var(--ambar);color:var(--sobre-ambar)}
+.boton.chico{min-height:44px;padding:0 16px;font-size:15px}
+@media (hover:hover){
+  .boton:hover{background:color-mix(in srgb,var(--tinta) 7%,transparent)}
+  .boton.lleno:hover{background:color-mix(in srgb,var(--ambar) 88%,var(--sobre-ambar))}
+}
+
+/* Cabecera: la única capa de vidrio de la página */
+.cabecera{position:sticky;top:0;z-index:50;background:var(--vidrio);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--veta)}
+@media (prefers-reduced-transparency: reduce){.cabecera{background:var(--piedra);-webkit-backdrop-filter:none;backdrop-filter:none}}
+.cabecera-fila{display:flex;align-items:center;justify-content:space-between;gap:16px;height:var(--alto-cab)}
+.marca{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--tinta)}
+.marca svg{display:block;height:24px;width:auto}.marca .m-tinta{fill:var(--tinta)}.marca .m-os{fill:var(--gris)}
+.menu{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;background:var(--piedra);border-block:1px solid var(--veta);padding:4px max(var(--gut),env(safe-area-inset-right,0px)) 24px max(var(--gut),env(safe-area-inset-left,0px))}
+.menu.abierto{display:flex}
+.menu a:not(.boton){display:flex;align-items:center;min-height:52px;font-size:17px;text-decoration:none;border-bottom:1px solid var(--veta)}
+.menu .boton{margin-top:20px;min-height:48px;font-size:16px}
+@media (min-width:960px){
+  .cabecera .abrir-menu{display:none}
+  .marca svg{height:28px}
+  .menu{display:flex;position:static;flex-direction:row;align-items:center;gap:2px;background:none;border:0;padding:0}
+  .menu a:not(.boton){display:inline-flex;min-height:44px;padding:0 12px;font-size:15px;border-bottom:0}
+  .menu .boton{margin:0 0 0 10px;min-height:44px;font-size:15px}
+}
+@media (min-width:960px) and (hover:hover){.menu a:not(.boton):hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}}
+
+/* Tipografía: la escala de la marca, que baja en el teléfono (h1 a 40 px, h2 a 30 px) */
+.ceja,.rotulo{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+.rotulo{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+.rotulo span{color:var(--tinta)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10.2vw,60px);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,7.7vw,40px);line-height:1.1;text-wrap:balance;max-width:22ch}
+h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
+.gris{color:var(--gris)}
+.lema{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+.texto{font-size:17px;line-height:1.5;max-width:60ch}
+@media (min-width:1100px){
+  h1{font-size:clamp(52px,4.4vw,64px);line-height:1}
+  h2{font-size:clamp(40px,3.1vw,44px)}
+  h3{font-size:22px}
+  .rotulo{margin-bottom:22px}
+}
+
+/* Portada */
+.portada{padding-block:28px 48px}
+.portada-top{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+.portada .ceja{margin-bottom:16px}
+.entrada{font-size:17px;line-height:1.5;max-width:60ch}
+.acciones{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-top:24px}
+.dato{margin-top:20px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.dato b{font-weight:500}
+@media (min-width:560px){.acciones{flex-direction:row;flex-wrap:wrap;align-items:center}}
+@media (min-width:700px){.portada{padding-block:48px 64px}.entrada{font-size:18px}}
+@media (min-width:1100px){
+  .portada{min-height:calc(100svh - var(--alto-cab) - 48px);display:flex;flex-direction:column;justify-content:center;padding-block:clamp(40px,6vh,64px)}
+  .portada-top{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,4vw,64px);align-items:end}
+  .portada .ceja{margin-bottom:20px}
+  .entrada{font-size:19px;max-width:44ch}
+}
+
+/* Tablero de la portada: en el teléfono las listas se deslizan de lado, como en la app */
+.app{margin-top:32px;background:var(--papel);border:1px solid var(--veta);border-radius:var(--r)}
+.app-barra{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 14px;border-bottom:1px solid var(--veta)}
+.app-nombre{font-weight:600;font-size:15px}
+.etq{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);border:1px solid var(--veta);padding:2px 7px;border-radius:var(--r)}
+.estado{flex-basis:100%;display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;color:var(--gris)}
+.punto{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--senal);outline:3px solid var(--senal-fondo);flex:none}
+.listas{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,74%);gap:10px;padding:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:12px;scrollbar-width:thin}
+.lista{scroll-snap-align:start;background:var(--cantera);border-radius:var(--r);padding:10px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.lista-t{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);display:flex;justify-content:space-between;gap:6px}
+.ficha{background:var(--papel);border:1px solid var(--veta);border-radius:var(--r);padding:10px 12px;font-size:15px;line-height:1.35;min-width:0;overflow-wrap:anywhere}
+.ficha small{display:flex;flex-wrap:wrap;gap:3px 8px;margin-top:6px;font-family:var(--mono);font-size:11px;line-height:1.4;color:var(--gris)}
+.ficha .asis{color:var(--senal)}
+.ficha.decide{background:var(--decide-fondo);border-color:color-mix(in srgb,var(--decide) 40%,var(--veta))}
+.ficha.decide small{color:var(--decide)}
+@media (min-width:700px){
+  .estado{flex-basis:auto;margin-left:auto}
+  .listas{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;scroll-snap-type:none}
+}
+@media (min-width:1100px){
+  .app{margin-top:clamp(32px,4.5vh,48px)}
+  .listas{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .ficha{padding:9px 10px;font-size:13.5px}
+}
+
+/* Secciones */
+.seccion{padding-block:56px;border-top:1px solid var(--veta)}
+.seccion.alt{background:var(--cantera)}
+.cabeza{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.cabeza .texto{color:var(--gris)}
+@media (min-width:700px){.seccion{padding-block:80px}.cabeza{gap:20px}}
+@media (min-width:1100px){
+  .seccion{padding-block:clamp(96px,12vh,128px)}
+  .cabeza{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,5vw,80px);align-items:end}
+}
+
+/* Qué instalamos */
+.dos{display:grid;grid-template-columns:minmax(0,1fr);gap:40px}
+.dos .texto{margin-top:16px;color:var(--gris)}
+.piezas{margin-top:28px}
+.pieza{display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;align-items:start;padding:18px 0;border-top:1px solid var(--veta)}
+.pieza svg{width:48px;height:34px}
+.pieza p{color:var(--gris);margin-top:4px;font-size:16px}
+.c-senal{color:var(--senal)}
+.detalle{width:100%;background:var(--papel);border:1px solid var(--veta);border-radius:var(--r);padding:18px}
+.det-cab{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
+.det-titulo{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.15;margin-top:14px}
+.det-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px;padding:16px 0;border-block:1px solid var(--veta)}
+.det-meta div:last-child{grid-column:1/-1}
+.det-meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
+.det-meta dd{margin-top:4px;font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.det-check{margin-top:18px}
+.det-check-t{display:flex;justify-content:space-between;gap:12px;font-size:15px;font-weight:600}
+.det-check-t span{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--gris)}
+.progreso{height:6px;background:var(--cantera);overflow:hidden;margin:10px 0 14px}
+.progreso i{display:block;height:100%;width:60%;background:var(--tinta)}
+.det-check ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px}
+.det-check li{display:flex;align-items:center;gap:8px;font-size:15px}
+.caja{position:relative;flex:none;width:16px;height:16px;border:1.5px solid var(--gris)}
+.ok .caja{background:var(--tinta);border-color:var(--tinta)}
+.ok .caja::after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid var(--papel);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.comentario{margin-top:20px;background:var(--senal-fondo);border-radius:var(--r);padding:14px 16px}
+.quien{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--senal)}
+.comentario p:not(.quien){margin-top:6px;font-size:15px;line-height:1.5}
+@media (min-width:700px){
+  .pieza{grid-template-columns:56px minmax(0,1fr);gap:18px}
+  .pieza svg{width:56px;height:40px}
+  .detalle{max-width:600px;padding:24px}
+  .det-titulo{font-size:28px}
+  .det-meta{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .det-meta div:last-child{grid-column:auto}
+  .det-check ul{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .det-check li{font-size:14px}
+}
+@media (min-width:1100px){
+  .dos{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(48px,6vw,96px);align-items:center}
+  .dos .texto{margin-top:22px}
+  .piezas{margin-top:34px}
+  .detalle{justify-self:end;padding:28px}
+}
+
+/* Para quién */
+.tres{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:32px}
+.tarjeta{min-width:0;display:flex;flex-direction:column;gap:12px;background:var(--papel);border:1px solid var(--veta);border-radius:var(--r);padding:20px}
+.tarjeta svg{width:60px;height:40px;margin-bottom:4px}
+.tarjeta p{color:var(--gris);font-size:16px}
+@media (min-width:700px){.tres{gap:16px;margin-top:48px}.tarjeta{padding:24px}.tarjeta svg{width:72px;height:48px}}
+@media (min-width:900px){.tres{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1100px){.tres{gap:24px;margin-top:clamp(48px,6vh,64px)}.tarjeta{padding:28px}}
+
+/* Cómo trabajamos: línea de tiempo vertical en el teléfono, horizontal en el escritorio */
+.fases{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr)}
+.fases li{min-width:0;display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px}
+.nodo{display:flex;flex-direction:column;align-items:center}
+.nodo b{flex:none;display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--tinta);border-radius:50%;background:var(--papel);font-family:var(--mono);font-weight:500;font-size:12.5px}
+.nodo::after{content:"";flex:1;width:1px;min-height:24px;margin:8px 0;background:var(--tinta);opacity:.28}
+.fases li:last-child .nodo::after{display:none}
+.fases li > div:last-child{padding:10px 0 28px}
+.fases li:last-child > div:last-child{padding-bottom:0}
+.fases h3{margin-bottom:6px}
+.fases p{color:var(--gris);font-size:16px}
+@media (min-width:1000px){
+  .fases{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:clamp(48px,7vh,72px)}
+  .fases li{display:block;padding-right:clamp(12px,1.6vw,28px)}
+  .nodo{flex-direction:row;margin-bottom:22px}
+  .nodo::after{width:auto;height:1px;min-height:0;margin:0 0 0 10px}
+  .fases li > div:last-child{padding:0}
+  .fases h3{margin-bottom:8px}
+  .fases p{font-size:15.5px}
+}
+
+/* Caso cero: el único momento animado */
+.cero{display:grid;grid-template-columns:minmax(0,1fr);gap:40px}
+.cero .texto{margin-top:16px;color:var(--gris)}
+.reglas{margin-top:24px;padding-top:16px;border-top:1px solid var(--veta);display:grid;gap:10px;font-family:var(--mono);font-size:13px;letter-spacing:.02em}
+.reglas p{display:flex;gap:12px}
+.reglas span{flex:none;min-width:5ch;color:var(--gris)}
+@media (min-width:1100px){.cero{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,6vw,96px);align-items:center}.cero .texto{margin-top:22px}}
+.ronda{--gap:8px;--paso:calc(100% + var(--gap));background:var(--papel);border:1px solid var(--veta);border-radius:var(--r);padding:14px}
+.ronda-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.ronda-cab p{font-weight:600;font-size:15px}
+.dia{position:relative;height:52px;margin-top:18px}
+.pista,.relleno{position:absolute;left:0;right:0;bottom:9px;height:2px}
+.pista{background:var(--cantera)}
+.relleno{background:var(--senal);transform-origin:left center}
+.hora{position:absolute;bottom:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--gris)}
+.hora i{display:block;width:20px;height:20px;border-radius:50%;border:2px solid var(--senal);background:var(--senal);outline:4px solid var(--papel)}
+.hora-1{left:20%}.hora-2{left:52%}.hora-3{left:84%}
+.mini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto repeat(3,auto);column-gap:var(--gap);row-gap:8px;margin-top:22px;padding-bottom:6px}
+.mini-t{grid-row:1;min-width:0;font-family:var(--mono);font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--gris);padding:0 0 10px;overflow-wrap:anywhere}
+.mini .fondo{grid-row:2/5;margin:-3px;background:var(--cantera);border-radius:var(--r)}
+.m-ficha{position:relative;z-index:1;grid-column:1;align-self:start;min-width:0;background:var(--papel);border:1px solid var(--veta);border-radius:var(--r);padding:6px;font-size:12px;line-height:1.3;overflow-wrap:break-word}
+.m-ficha small{position:relative;display:block;margin-top:4px;font-family:var(--mono);font-size:11px;color:var(--gris)}
+@media (min-width:560px){.ronda{--gap:16px;padding:20px}.mini .fondo{margin:-6px}.mini-t{letter-spacing:.05em}.m-ficha{padding:8px 9px;font-size:13px}}
+@media (min-width:1100px){.ronda{padding:24px}}
+.m-ficha .despues{display:none}
+.m-a{grid-row:2;transform:translateX(calc(var(--paso)*2));background:var(--decide-fondo);border-color:color-mix(in srgb,var(--decide) 40%,var(--veta))}
+.m-a small{color:var(--decide)}
+.m-a .antes{display:none}.m-a .despues{display:block}
+.m-b{grid-row:3;transform:translateX(calc(var(--paso)*3))}
+.m-c{grid-row:4;transform:translateX(var(--paso))}
+/* Estado inicial, solo con animación permitida y antes de jugar */
+.js-motion .ronda:not(.jugada) .m-a{transform:none;background:var(--papel);border-color:var(--veta)}
+.js-motion .ronda:not(.jugada) .m-a small{color:var(--gris)}
+.js-motion .ronda:not(.jugada) .m-a .antes{display:block}
+.js-motion .ronda:not(.jugada) .m-a .despues{display:none}
+.js-motion .ronda:not(.jugada) .m-b{transform:translateX(var(--paso))}
+.js-motion .ronda:not(.jugada) .m-c{transform:none}
+.js-motion .ronda:not(.jugada) .relleno{transform:scaleX(0)}
+.js-motion .ronda:not(.jugada) .hora i{background:var(--papel)}
+/* La ronda: 3,6 s, rondas al 20 %, 52 % y 84 % */
+.ronda.jugada .relleno{animation:r-relleno 3.6s linear both}
+.ronda.jugada .hora i{animation:r-enciende .25s ease both}
+.ronda.jugada .hora-1 i{animation-delay:.72s}
+.ronda.jugada .hora-2 i{animation-delay:1.87s}
+.ronda.jugada .hora-3 i{animation-delay:3.02s}
+.ronda.jugada .m-a{animation:r-a 3.6s cubic-bezier(.65,0,.35,1) both,r-a-color 3.6s linear both}
+.ronda.jugada .m-a small{animation:r-a-texto 3.6s linear both}
+.ronda.jugada .m-a .antes{display:block;animation:r-sale 3.6s linear both}
+.ronda.jugada .m-a .despues{display:block;position:absolute;inset:0 auto auto 0;animation:r-entra 3.6s linear both}
+.ronda.jugada .m-b{animation:r-b 3.6s cubic-bezier(.65,0,.35,1) both}
+.ronda.jugada .m-c{animation:r-c 3.6s cubic-bezier(.65,0,.35,1) both}
+@keyframes r-relleno{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes r-enciende{from{background:var(--papel)}to{background:var(--senal)}}
+@keyframes r-a{0%,19%{transform:none}25%,51%{transform:translateX(var(--paso))}57%,100%{transform:translateX(calc(var(--paso)*2))}}
+@keyframes r-a-color{0%,84%{background:var(--papel);border-color:var(--veta)}90%,100%{background:var(--decide-fondo);border-color:color-mix(in srgb,var(--decide) 40%,var(--veta))}}
+@keyframes r-a-texto{0%,84%{color:var(--gris)}90%,100%{color:var(--decide)}}
+@keyframes r-sale{0%,84%{opacity:1}88%,100%{opacity:0}}
+@keyframes r-entra{0%,86%{opacity:0}90%,100%{opacity:1}}
+@keyframes r-b{0%,83%{transform:translateX(var(--paso))}90%,100%{transform:translateX(calc(var(--paso)*3))}}
+@keyframes r-c{0%,51%{transform:none}57%,100%{transform:translateX(var(--paso))}}
+/* En el teléfono «Decide el dueño» ocupa dos líneas: las dos etiquetas comparten celda para que la tarjeta crezca y no se salga */
+.ronda.jugada .m-a small{display:grid}
+.ronda.jugada .m-a small > span{grid-area:1/1}
+.ronda.jugada .m-a .despues{position:static}
+
+/* Método */
+.matriz{margin-top:36px;display:grid;gap:28px}
+.fila{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:6px;border-top:1px solid var(--tinta)}
+.fila-n{grid-column:1/-1;padding-top:14px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+.d{min-width:0;padding:12px 16px 0 0}
+.d b{display:block;font-family:var(--display);font-weight:700;font-size:56px;line-height:.9}
+.d span{display:block;margin-top:8px;font-size:16px;font-weight:600;overflow-wrap:anywhere}
+@media (min-width:760px){
+  .fila{grid-template-columns:minmax(130px,1.1fr) repeat(4,minmax(0,2fr));row-gap:0}
+  .fila-n{grid-column:auto;padding-top:16px}
+  .d{padding-top:14px}
+  .d b{font-size:clamp(56px,5.6vw,88px)}
+  .d span{margin-top:10px}
+}
+@media (min-width:1100px){.matriz{margin-top:clamp(48px,7vh,72px);gap:40px}}
+
+/* Contacto */
+.contacto-fila{display:grid;grid-template-columns:minmax(0,1fr);gap:36px}
+.contacto-fila .texto{margin-top:16px;color:var(--gris)}
+.contacto-fila .acciones{margin-top:24px}
+.contacto-datos{display:flex;flex-wrap:wrap;gap:0 24px;margin-top:8px;font-family:var(--mono);font-size:13px;letter-spacing:.02em}
+.contacto-datos a{display:inline-flex;align-items:center;min-height:44px;color:var(--gris);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+@media (hover:hover){.contacto-datos a:hover{color:var(--tinta)}}
+.escena{position:relative;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--veta);border-radius:var(--r);background:linear-gradient(180deg,var(--cantera) 0 68%,var(--veta) 68% 68.4%,var(--piedra) 68.4% 100%)}
+.escena svg{position:absolute;left:50%;bottom:31.6%;height:46%;width:auto;transform:translateX(-50%);fill:var(--tinta)}
+@media (min-width:560px){.escena{aspect-ratio:16/9}}
+@media (min-width:1000px){
+  .contacto-fila{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,6vw,96px);align-items:center}
+  .contacto-fila .texto{margin-top:18px}
+  .contacto-fila .acciones{margin-top:28px}
+  .escena{aspect-ratio:16/10}
+}
+
+.pie{border-top:1px solid var(--veta);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-family:var(--mono);font-size:12px;color:var(--gris)}
+.pie-fila{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+
+/* Entrada de la portada: una sola vez, corta y sin rebote */
+@keyframes entrar{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.js-motion [data-enter]{animation:entrar .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0) * 70ms)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="envoltura cabecera-fila">
+    <a class="marca" href="#inicio" aria-label="MonolithOS, inicio"><svg viewBox="0 0 730.655 140" aria-hidden="true"><path class="m-tinta" d="M0 0 L47.727 27.555 L95.455 0 L95.455 22.044 L47.727 49.6 L0 22.044 Z M0 33.066 L25.455 47.763 L25.455 140 L0 140 Z M35 53.274 L47.727 60.622 L60.455 53.274 L60.455 140 L35 140 Z M70 47.763 L95.455 33.066 L95.455 140 L70 140 Z"/><path class="m-tinta" d="M144.455 105V35H168.955L181.055 96H182.855L194.955 35H219.455V105H206.655V44.7H204.855L192.855 105H171.055L159.055 44.7H157.255V105Z M260.655 106.4Q253.255 106.4 247.355 103.4Q241.455 100.4 238.055 94.7Q234.655 89 234.655 81V79.4Q234.655 71.4 238.055 65.7Q241.455 60 247.355 57Q253.255 54 260.655 54Q268.055 54 273.955 57Q279.855 60 283.255 65.7Q286.655 71.4 286.655 79.4V81Q286.655 89 283.255 94.7Q279.855 100.4 273.955 103.4Q268.055 106.4 260.655 106.4ZM260.655 95.2Q266.455 95.2 270.255 91.45Q274.055 87.7 274.055 80.7V79.7Q274.055 72.7 270.305 68.95Q266.555 65.2 260.655 65.2Q254.855 65.2 251.055 68.95Q247.255 72.7 247.255 79.7V80.7Q247.255 87.7 251.055 91.45Q254.855 95.2 260.655 95.2Z M302.255 105V55.4H314.655V61.9H316.455Q317.655 59.3 320.955 56.95Q324.255 54.6 330.955 54.6Q336.755 54.6 341.105 57.25Q345.455 59.9 347.855 64.55Q350.255 69.2 350.255 75.4V105H337.655V76.4Q337.655 70.8 334.905 68Q332.155 65.2 327.055 65.2Q321.255 65.2 318.055 69.05Q314.855 72.9 314.855 79.8V105Z M391.455 106.4Q384.055 106.4 378.155 103.4Q372.255 100.4 368.855 94.7Q365.455 89 365.455 81V79.4Q365.455 71.4 368.855 65.7Q372.255 60 378.155 57Q384.055 54 391.455 54Q398.855 54 404.755 57Q410.655 60 414.055 65.7Q417.455 71.4 417.455 79.4V81Q417.455 89 414.055 94.7Q410.655 100.4 404.755 103.4Q398.855 106.4 391.455 106.4ZM391.455 95.2Q397.255 95.2 401.055 91.45Q404.855 87.7 404.855 80.7V79.7Q404.855 72.7 401.105 68.95Q397.355 65.2 391.455 65.2Q385.655 65.2 381.855 68.95Q378.055 72.7 378.055 79.7V80.7Q378.055 87.7 381.855 91.45Q385.655 95.2 391.455 95.2Z M433.055 105V35H445.655V105Z M463.655 105V55.4H476.255V105ZM469.955 49.6Q466.555 49.6 464.205 47.4Q461.855 45.2 461.855 41.6Q461.855 38 464.205 35.8Q466.555 33.6 469.955 33.6Q473.455 33.6 475.755 35.8Q478.055 38 478.055 41.6Q478.055 45.2 475.755 47.4Q473.455 49.6 469.955 49.6Z M513.255 105Q508.355 105 505.305 101.95Q502.255 98.9 502.255 93.8V65.8H489.855V55.4H502.255V40H514.855V55.4H528.455V65.8H514.855V91.6Q514.855 94.6 517.655 94.6H527.255V105Z M543.855 105V35H556.455V61.5H558.255Q559.055 59.9 560.755 58.3Q562.455 56.7 565.305 55.65Q568.155 54.6 572.555 54.6Q578.355 54.6 582.705 57.25Q587.055 59.9 589.455 64.55Q591.855 69.2 591.855 75.4V105H579.255V76.4Q579.255 70.8 576.505 68Q573.755 65.2 568.655 65.2Q562.855 65.2 559.655 69.05Q556.455 72.9 556.455 79.8V105Z"/><path class="m-os" d="M636.055 106.4Q623.155 106.4 615.555 99.15Q607.955 91.9 607.955 78.2V61.8Q607.955 48.1 615.555 40.85Q623.155 33.6 636.055 33.6Q648.955 33.6 656.605 40.85Q664.255 48.1 664.255 61.8V78.2Q664.255 91.9 656.605 99.15Q648.955 106.4 636.055 106.4ZM636.055 96.7Q644.355 96.7 648.855 91.85Q653.355 87 653.355 78.6V61.4Q653.355 53 648.855 48.15Q644.355 43.3 636.055 43.3Q627.955 43.3 623.355 48.15Q618.755 53 618.755 61.4V78.6Q618.755 87 623.355 91.85Q627.955 96.7 636.055 96.7Z M704.855 106.4Q696.955 106.4 690.855 103.6Q684.755 100.8 681.305 95.35Q677.855 89.9 677.855 82.1V79.6H688.555V82.1Q688.555 89.5 693.005 93.2Q697.455 96.9 704.855 96.9Q712.355 96.9 716.155 93.75Q719.955 90.6 719.955 85.6Q719.955 82.3 718.155 80.2Q716.355 78.1 713.055 76.85Q709.755 75.6 705.155 74.5L701.455 73.6Q694.755 72 689.805 69.65Q684.855 67.3 682.155 63.4Q679.455 59.5 679.455 53.4Q679.455 47.2 682.505 42.8Q685.555 38.4 690.955 36Q696.355 33.6 703.655 33.6Q710.955 33.6 716.705 36.1Q722.455 38.6 725.755 43.5Q729.055 48.4 729.055 55.8V59.4H718.355V55.8Q718.355 51.3 716.505 48.5Q714.655 45.7 711.355 44.4Q708.055 43.1 703.655 43.1Q697.255 43.1 693.705 45.75Q690.155 48.4 690.155 53.1Q690.155 56.3 691.705 58.35Q693.255 60.4 696.255 61.7Q699.255 63 703.755 64L707.455 64.9Q714.255 66.4 719.455 68.75Q724.655 71.1 727.655 75.1Q730.655 79.1 730.655 85.4Q730.655 91.7 727.505 96.4Q724.355 101.1 718.555 103.75Q712.755 106.4 704.855 106.4Z"/></svg></a>
+    <button type="button" class="boton chico abrir-menu" id="abrir-menu" aria-expanded="false" aria-controls="menu">Menú</button>
+    <nav class="menu" id="menu" aria-label="Secciones">
+      <a class="subraya" href="#que-instalamos">Qué instalamos</a>
+      <a class="subraya" href="#como-trabajamos">Cómo trabajamos</a>
+      <a class="subraya" href="#caso-cero">Caso cero</a>
+      <a class="subraya" href="#metodo">Método</a>
+      <a class="boton chico lleno" href="#contacto">Pide una auditoría</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+
+<section class="portada" id="inicio" aria-labelledby="titulo">
+  <div class="envoltura">
+    <div class="portada-top">
+      <div>
+        <p class="ceja" data-enter style="--d:0">MonolithOS · Método 4D</p>
+        <h1 id="titulo" data-enter style="--d:1">Sistemas de gestión con IA para empresas dirigidas por su dueño. <span class="gris lema">Claridad y control.</span></h1>
+      </div>
+      <div data-enter style="--d:3">
+        <p class="entrada">Te instalo la gestión de proyectos con IA. Tu empresa queda operando sola, sin suscripciones y sin depender de mí.</p>
+        <div class="acciones">
+          <a class="boton lleno" href="#contacto">Pide una auditoría <span class="flecha" aria-hidden="true">→</span></a>
+          <a class="boton" href="#que-instalamos">Ver qué se instala</a>
+        </div>
+        <p class="dato"><b>Programa de 4 a 8 semanas</b></p>
+      </div>
+    </div>
+
+    <div class="app" data-enter style="--d:5" role="img" aria-label="Ejemplo de tablero instalado, con seis listas: Empieza aquí, Inbox, Por hacer, En curso, En revisión y Hecho. El asistente ya hizo la ronda de las 13:00 y dejó una decisión para el dueño.">
+      <div class="app-barra">
+        <span class="app-nombre">Tablero de la empresa</span>
+        <span class="etq">Ejemplo</span>
+        <span class="estado"><span class="punto"></span>Ronda de las 13:00 · hecha</span>
+      </div>
+      <div class="listas">
+        <div class="lista"><p class="lista-t">Empieza aquí<span>2</span></p>
+          <div class="ficha">Cómo se usa este tablero<small>Fijada</small></div>
+          <div class="ficha">Reglas de la empresa<small>Documento</small></div>
+        </div>
+        <div class="lista"><p class="lista-t">Inbox<span>2</span></p>
+          <div class="ficha">Pedido nuevo de un cliente<small>Ventas · hoy</small></div>
+          <div class="ficha">¿Qué vence esta semana?<small class="asis">Respondió el asistente</small></div>
+        </div>
+        <div class="lista"><p class="lista-t">Por hacer<span>2</span></p>
+          <div class="ficha">Cotización para cliente nuevo<small>Ventas · jue</small></div>
+          <div class="ficha">Pago a proveedor<small>Finanzas · vie</small></div>
+        </div>
+        <div class="lista"><p class="lista-t">En curso<span>1</span></p>
+          <div class="ficha">Entregar 5 clips<small><span>Redes · mar</span><span>3/5</span><span class="asis">1 comentario</span></small></div>
+        </div>
+        <div class="lista"><p class="lista-t">En revisión<span>1</span></p>
+          <div class="ficha decide">¿Aprobamos la pieza?<small>Decide el dueño</small></div>
+        </div>
+        <div class="lista"><p class="lista-t">Hecho<span>2</span></p>
+          <div class="ficha">Calendario del mes<small>Redes</small></div>
+          <div class="ficha">Factura de octubre<small>Finanzas</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="seccion alt" id="que-instalamos" aria-labelledby="t-instalamos">
+  <div class="envoltura dos">
+    <div>
+      <p class="rotulo"><span>01</span>Qué instalamos</p>
+      <h2 id="t-instalamos">Sistemas de gestión con IA. <span class="gris">No agentes sueltos ni cursos.</span></h2>
+      <p class="texto">Un agente suelto resuelve una tarea y se olvida del resto. Un curso te deja la teoría y el trabajo sigue igual. MonolithOS deja instalado el sistema completo: dónde entra cada pedido, quién lo hace, cómo se revisa y cuándo se cierra.</p>
+      <div class="piezas">
+        <div class="pieza">
+          <svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1" y="1" width="54" height="38" rx="1.5"/><path d="M9 7v20M17 7v26M25 7v14M33 7v22M41 7v17M49 7v11" stroke-width="4"/></svg>
+          <div><h3>Un solo tablero</h3><p>Todo el trabajo de la empresa en un lugar, con las mismas seis listas para cada equipo.</p></div>
+        </div>
+        <div class="pieza">
+          <svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="12" y="1" width="32" height="38" rx="1.5"/><path d="M22 11h15M22 20h15M22 29h10"/><circle cx="17.5" cy="11" r="1.7" fill="currentColor" stroke="none"/><circle cx="17.5" cy="20" r="1.7" fill="currentColor" stroke="none"/><circle cx="17.5" cy="29" r="1.7" fill="currentColor" stroke="none"/></svg>
+          <div><h3>Reglas escritas</h3><p>Quién decide qué, en cuánto tiempo se responde y qué procedimiento sigue cada tarea.</p></div>
+        </div>
+        <div class="pieza">
+          <svg viewBox="0 0 56 40" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="28" cy="20" r="17"/><path d="M28 20l8.5 14.7"/><circle cx="11" cy="20" r="2.6" fill="currentColor" stroke="none"/><circle cx="36.5" cy="5.3" r="2.6" fill="currentColor" stroke="none"/><circle class="c-senal" cx="36.5" cy="34.7" r="2.6" fill="currentColor" stroke="none"/></svg>
+          <div><h3>Un asistente que hace la ronda</h3><p>La IA atiende al equipo en sus propias tarjetas y al dueño le deja solo las decisiones.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detalle" role="img" aria-label="Una tarjeta abierta del tablero: Entregar 5 clips, en curso, con dueño, fecha de entrega, procedimiento, una lista de entrega de 3 de 5 y un comentario del asistente.">
+      <div class="det-cab"><span>Tablero de la empresa · En curso</span><span class="etq">Ejemplo</span></div>
+      <p class="det-titulo">Entregar 5 clips</p>
+      <dl class="det-meta">
+        <div><dt>Dueño</dt><dd>Redes</dd></div>
+        <div><dt>Entrega</dt><dd>Martes</dd></div>
+        <div><dt>Procedimiento</dt><dd>Entrega de piezas</dd></div>
+      </dl>
+      <div class="det-check">
+        <p class="det-check-t">Lista de entrega <span>3 de 5</span></p>
+        <div class="progreso"><i></i></div>
+        <ul>
+          <li class="ok"><span class="caja"></span>Clip 1</li>
+          <li class="ok"><span class="caja"></span>Clip 2</li>
+          <li class="ok"><span class="caja"></span>Clip 3</li>
+          <li><span class="caja"></span>Clip 4</li>
+          <li><span class="caja"></span>Clip 5</li>
+        </ul>
+      </div>
+      <div class="comentario">
+        <p class="quien"><span class="punto"></span>Asistente · ronda de las 13:00</p>
+        <p>Faltan los clips 4 y 5 en la carpeta de entregas. Lo reviso otra vez a las 17:00.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="seccion" id="para-quien" aria-labelledby="t-quien">
+  <div class="envoltura">
+    <div class="cabeza">
+      <div>
+        <p class="rotulo"><span>02</span>Para quién</p>
+        <h2 id="t-quien">Para el dueño que hoy es el cuello de botella de su propia empresa.</h2>
+      </div>
+      <p class="texto">Pymes donde todo pasa por una persona. Esto es lo que deja de pasarte.</p>
+    </div>
+    <div class="tres">
+      <div class="tarjeta">
+        <svg viewBox="0 0 72 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="5" width="62" height="38" rx="1.5"/><rect x="14" y="15" width="12" height="18" fill="currentColor" stroke="none"/><rect x="30" y="15" width="12" height="18" fill="currentColor" stroke="none"/><rect x="46" y="15" width="12" height="18" fill="currentColor" stroke="none"/></svg>
+        <h3>La agencia que te tiene de rehén</h3>
+        <p>El sistema, los documentos y el tablero quedan en tu empresa.</p>
+      </div>
+      <div class="tarjeta">
+        <svg viewBox="0 0 72 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M50 24a14 14 0 1 1-4.1-9.9"/><path d="M47 8v7h-7"/><path d="M14 42L58 6"/></svg>
+        <h3>El software con cuota eterna</h3>
+        <p>Se arma con lo que ya usas.</p>
+      </div>
+      <div class="tarjeta">
+        <svg viewBox="0 0 72 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M17 37L36 11L55 37Z"/><circle cx="17" cy="37" r="6" fill="currentColor" stroke="none"/><circle cx="36" cy="11" r="6" fill="currentColor" stroke="none"/><circle cx="55" cy="37" r="6" fill="currentColor" stroke="none"/></svg>
+        <h3>El empleado imprescindible</h3>
+        <p>Cada tarea tiene dueño, fecha y procedimiento escrito, así que el trabajo no depende de una sola persona.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="seccion alt" id="como-trabajamos" aria-labelledby="t-como">
+  <div class="envoltura">
+    <div class="cabeza">
+      <div>
+        <p class="rotulo"><span>03</span>Cómo trabajamos</p>
+        <h2 id="t-como">Un programa con principio y fin.</h2>
+      </div>
+      <p class="texto">La duración depende del tamaño de tu empresa. Al terminar, si quieres, sigue un soporte mensual sin permanencia.</p>
+    </div>
+    <ol class="fases">
+      <li><div class="nodo"><b>01</b></div><div><h3>Auditoría</h3><p>Vemos cómo trabaja hoy tu empresa: por dónde entran los pedidos, quién los hace y dónde se traban.</p></div></li>
+      <li><div class="nodo"><b>02</b></div><div><h3>Diseño</h3><p>Definimos el tablero, las reglas y los procedimientos a tu medida.</p></div></li>
+      <li><div class="nodo"><b>03</b></div><div><h3>Construcción</h3><p>Montamos el sistema y el asistente de IA con tus herramientas.</p></div></li>
+      <li><div class="nodo"><b>04</b></div><div><h3>Despliegue y traspaso</h3><p>Tu equipo lo usa con acompañamiento y recibes todo documentado.</p></div></li>
+      <li><div class="nodo"><b>05</b></div><div><h3>Seguimiento a 30 días</h3><p>Revisamos qué funcionó y ajustamos lo que haga falta.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="seccion" id="caso-cero" aria-labelledby="t-cero">
+  <div class="envoltura cero">
+    <div>
+      <p class="rotulo"><span>04</span>Caso cero</p>
+      <h2 id="t-cero">La primera empresa que corre sobre MonolithOS es la nuestra.</h2>
+      <p class="texto">Antes de instalarlo en otra empresa, le aplicamos el procedimiento completo a la nuestra: ocho unidades de negocio, cada una con su responsable, de la producción de contenido con IA al software y la asesoría. Un asistente atiende al equipo en Trello tres veces al día, los procedimientos están escritos y el dueño solo decide.</p>
+      <div class="reglas">
+        <p><span>Regla</span>Un canal por persona.</p>
+        <p><span>Regla</span>Nada se cierra sin un comentario en su tarjeta.</p>
+        <p><span>Desde</span>noviembre de 2026, en instalación.</p>
+      </div>
+    </div>
+
+    <div class="ronda" id="ronda">
+      <div class="ronda-cab">
+        <p>Un día con el asistente</p>
+        <button type="button" class="boton chico" id="repetir">Repetir la ronda</button>
+      </div>
+      <div role="img" aria-label="Un día de trabajo: en las rondas de las 09:00, 13:00 y 17:00 el asistente mueve las tarjetas. Al final del día la cotización queda en revisión como decisión del dueño, la entrega de clips queda hecha y el pago de la factura queda en curso.">
+        <div class="dia" aria-hidden="true">
+          <span class="pista"></span><span class="relleno"></span>
+          <span class="hora hora-1">09:00<i></i></span>
+          <span class="hora hora-2">13:00<i></i></span>
+          <span class="hora hora-3">17:00<i></i></span>
+        </div>
+        <div class="mini" aria-hidden="true">
+          <span class="mini-t" style="grid-column:1">Por hacer</span>
+          <span class="mini-t" style="grid-column:2">En curso</span>
+          <span class="mini-t" style="grid-column:3">En revisión</span>
+          <span class="mini-t" style="grid-column:4">Hecho</span>
+          <span class="fondo" style="grid-column:1"></span>
+          <span class="fondo" style="grid-column:2"></span>
+          <span class="fondo" style="grid-column:3"></span>
+          <span class="fondo" style="grid-column:4"></span>
+          <div class="m-ficha m-a">Cotizar<small><span class="antes">Ventas</span><span class="despues">Decide el dueño</span></small></div>
+          <div class="m-ficha m-b">Entregar 5 clips<small>Redes</small></div>
+          <div class="m-ficha m-c">Pagar factura<small>Finanzas</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="seccion alt" id="metodo" aria-labelledby="t-metodo">
+  <div class="envoltura">
+    <div class="cabeza">
+      <div>
+        <p class="rotulo"><span>05</span>Método</p>
+        <h2 id="t-metodo">Método 4D, dos veces.</h2>
+      </div>
+      <p class="texto">Las cuatro etapas de construir un producto, combinadas con las cuatro competencias para trabajar bien con IA del marco AI Fluency de Anthropic.</p>
+    </div>
+    <div class="matriz">
+      <div class="fila">
+        <p class="fila-n">El producto</p>
+        <p class="d"><b aria-hidden="true">D</b><span>Discover</span></p>
+        <p class="d"><b aria-hidden="true">D</b><span>Design</span></p>
+        <p class="d"><b aria-hidden="true">D</b><span>Develop</span></p>
+        <p class="d"><b aria-hidden="true">D</b><span>Deploy</span></p>
+      </div>
+      <div class="fila">
+        <p class="fila-n">El trabajo con IA</p>
+        <p class="d"><b aria-hidden="true">D</b><span>Delegación</span></p>
+        <p class="d"><b aria-hidden="true">D</b><span>Descripción</span></p>
+        <p class="d"><b aria-hidden="true">D</b><span>Discernimiento</span></p>
+        <p class="d"><b aria-hidden="true">D</b><span>Diligencia</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="seccion" id="contacto" aria-labelledby="t-contacto">
+  <div class="envoltura contacto-fila">
+    <div>
+      <p class="rotulo"><span>06</span>Contacto</p>
+      <h2 id="t-contacto">Pide una auditoría.</h2>
+      <p class="texto">Cupos limitados: trabajamos con pocas empresas a la vez.</p>
+      <div class="acciones">
+        <a class="boton lleno" href="https://wa.me/584241898307?text=Hola%2C%20quiero%20pedir%20una%20auditor%C3%ADa%20para%20mi%20empresa." target="_blank" rel="noopener">Pide una auditoría por WhatsApp <span class="flecha" aria-hidden="true">→</span></a>
+        <a class="boton" href="mailto:jurisconsultavzla@gmail.com?subject=Auditor%C3%ADa%20MonolithOS">Escribe un correo</a>
+      </div>
+      <p class="contacto-datos"><a href="https://wa.me/584241898307" target="_blank" rel="noopener">+58 424 189 8307</a><a href="mailto:jurisconsultavzla@gmail.com">jurisconsultavzla@gmail.com</a></p>
+    </div>
+    <div class="escena" role="img" aria-label="El icono de MonolithOS, tres losas bajo un dintel, de pie sobre el horizonte"><svg viewBox="0 0 15 22" aria-hidden="true"><path d="M0 0 L7.5 4.33 L15 0 L15 3.464 L7.5 7.794 L0 3.464 Z M0 5.196 L4 7.506 L4 22 L0 22 Z M5.5 8.372 L7.5 9.526 L9.5 8.372 L9.5 22 L5.5 22 Z M11 7.506 L15 5.196 L15 22 L11 22 Z"/></svg></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="pie">
+  <div class="envoltura pie-fila"><span>MonolithOS · Claridad y control.</span><span>Este sitio no usa cookies ni formularios. Si nos escribes por WhatsApp o correo, usamos tus datos solo para responderte.</span></div>
+</footer>
+
+<script>
+(function(){
+  // Hace que :active funcione al tocar en iOS
+  document.addEventListener('touchstart',function(){},{passive:true});
+  var reduce=false;
+  try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+
+  // Menú en pantallas chicas
+  var abrir=document.getElementById('abrir-menu'), menu=document.getElementById('menu');
+  function ponerMenu(a){ abrir.setAttribute('aria-expanded',String(a)); menu.classList.toggle('abierto',a); }
+  abrir.addEventListener('click',function(){ ponerMenu(abrir.getAttribute('aria-expanded')!=='true'); });
+  Array.prototype.forEach.call(menu.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ ponerMenu(false); }); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && abrir.getAttribute('aria-expanded')==='true'){ ponerMenu(false); abrir.focus(); } });
+
+  // El momento: la ronda se juega una vez al verla y se repite solo con el botón (nada de movimiento en gestos frecuentes)
+  var ronda=document.getElementById('ronda'), repetir=document.getElementById('repetir'), ultima=0;
+  if(reduce){ repetir.hidden=true; return; }
+  function jugar(){
+    var ahora=Date.now(); if(ahora-ultima<3700){ return; } ultima=ahora;
+    ronda.classList.remove('jugada'); void ronda.offsetWidth; ronda.classList.add('jugada');
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ jugar(); io.disconnect(); } }); },{threshold:.5});
+    io.observe(ronda);
+  } else { jugar(); }
+  repetir.addEventListener('click',function(){ ultima=0; jugar(); });
+})();
+</script>
