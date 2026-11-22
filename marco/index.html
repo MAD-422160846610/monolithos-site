@@ -19,28 +19,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@1,400&display=swap">
+  <link rel="stylesheet" href="../recursos/tokens.css">
   <style>
-:root{
-  --piedra:#F8F9FA; --cantera:#EDEFF2; --papel:#FFFFFF; --tinta:#0B0E14; --gris:#3E4C59; --veta:#D3D9E0; --ambar:#D97706; --sobre-ambar:#0B0E14;
-  --senal:#047857; --senal-fondo:#DCF2E8; --decide:#9A5200; --decide-fondo:#FBEFD9;
-  --vidrio:rgba(248,249,250,.78);
-  --display:"Space Grotesk",Arial,system-ui,sans-serif;
-  --texto:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace; --serif:"Newsreader",Georgia,serif;
-  --r:0px; --gut:20px; --alto-cab:56px;
-}
+/* Hallmark · shape: kept · genre: modern-minimal · theme: brand · redesign: polish
+ * paper: #F8F9FA piedra · accent: #D97706 ambar · display: Space Grotesk · body: Inter
+ * nav: kept · signature: kept · states: kept
+ * axes: light/grotesk/amber · posture: kept · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V3 · weakest: S, página secundaria; hereda el sistema compartido de DESIGN.md sin cambiar su contenido */
+/* Hallmark · dismissed 29 · el vidrio vive solo en la cabecera, la regla de apple-design-skill que Marco pidió para el sitio */
+:root{--gut:20px; --alto-cab:56px}
 @media (min-width:700px){:root{--gut:32px; --alto-cab:64px}}
 @media (min-width:1100px){:root{--gut:clamp(40px,4.4vw,64px)}}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
-  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
-  --vidrio:rgba(11,14,20,.78); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
-  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
-  --vidrio:rgba(11,14,20,.78); color-scheme:dark}
 
 *{box-sizing:border-box}
+html,body{overflow-x:clip}
 html{scroll-padding-top:calc(var(--alto-cab) + 16px);-webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
 body{margin:0;background:var(--piedra);color:var(--tinta);font-family:var(--texto);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -52,11 +44,11 @@ h1,h2,h3{margin:0;font-weight:inherit}
 p{text-wrap:pretty}
 .envoltura{width:100%;max-width:1280px;margin-inline:auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
 :focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
-.saltar{position:absolute;left:12px;top:-80px;z-index:100;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--tinta);color:var(--piedra);font-family:var(--mono);font-size:13px;text-decoration:none}
+.saltar{position:absolute;left:12px;top:-80px;z-index:100;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--tinta);color:var(--piedra);font-family:var(--texto);font-size:13px;text-decoration:none}
 .saltar:focus{top:12px}
 
-.ceja,.rotulo{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
-.rotulo{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+.ceja,.rotulo{font-family:var(--texto);font-size:12px;color:var(--gris)}
+.rotulo{display:flex;align-items:baseline;gap:16px;margin-bottom:16px}
 .rotulo span{color:var(--tinta)}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10.2vw,60px);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
 h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,7.7vw,40px);line-height:1.1;text-wrap:balance;max-width:22ch}
@@ -68,7 +60,7 @@ h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
   h1{font-size:clamp(52px,4.4vw,64px);line-height:1}
   h2{font-size:clamp(40px,3.1vw,44px)}
   h3{font-size:22px}
-  .rotulo{margin-bottom:22px}
+  .rotulo{margin-bottom:24px}
 }
 
 .cabecera{position:sticky;top:0;z-index:50;background:var(--vidrio);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--veta)}
@@ -85,7 +77,7 @@ h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
   .marca svg{height:28px}
   .menu{display:flex;position:static;flex-direction:row;align-items:center;gap:2px;background:none;border:0;padding:0}
   .menu a:not(.boton){display:inline-flex;min-height:44px;padding:0 12px;font-size:15px;border-bottom:0}
-  .menu .boton{margin:0 0 0 10px;min-height:44px;font-size:15px}
+  .menu .boton{margin:0 0 0 8px;min-height:44px;font-size:15px}
 }
 @media (min-width:960px) and (hover:hover){.menu a:not(.boton):hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}}
 
@@ -100,21 +92,21 @@ h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
 }
 
 .cv-tabla{width:100%;border-collapse:collapse;font-size:15px}
-.cv-tabla th,.cv-tabla td{padding:10px 12px;border-bottom:1px solid var(--veta);text-align:left;vertical-align:top}
-.cv-tabla th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);font-weight:600;white-space:nowrap}
+.cv-tabla th,.cv-tabla td{padding:8px 12px;border-bottom:1px solid var(--veta);text-align:left;vertical-align:top}
+.cv-tabla th{font-family:var(--texto);font-size:12px;color:var(--gris);font-weight:600;white-space:nowrap}
 .cv-tabla td{font-family:var(--texto)}
 .cv-tabla tr:last-child td{border-bottom:none}
-.cv-tabla .pendiente{color:var(--decide);font-family:var(--mono);font-size:13px}
+.cv-tabla .pendiente{color:var(--decide);font-family:var(--texto);font-size:13px}
 
 .cv-lista{list-style:none;padding:0;margin:0;display:grid;gap:16px}
 .cv-lista li{background:var(--papel);border:1px solid var(--veta);border-radius:var(--r);padding:20px}
 .cv-lista h3{margin-bottom:8px}
 .cv-lista p{color:var(--gris);font-size:16px}
 
-.pie{border-top:1px solid var(--veta);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-family:var(--mono);font-size:12px;color:var(--gris)}
+.pie{border-top:1px solid var(--veta);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-family:var(--texto);font-size:12px;color:var(--gris)}
 .pie-fila{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
 
-.aviso-cv{background:var(--decide-fondo);border:1px solid var(--decide);border-radius:var(--r);padding:16px;margin-bottom:24px;font-family:var(--mono);font-size:13px;color:var(--decide)}
+.aviso-cv{background:var(--decide-fondo);border:1px solid var(--decide);border-radius:var(--r);padding:16px;margin-bottom:24px;font-family:var(--texto);font-size:13px;color:var(--decide)}
 
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
   </style>
@@ -154,7 +146,7 @@ h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
         <section aria-labelledby="perfil-titulo">
           <h2 id="perfil-titulo">Perfil</h2>
           <p class="texto">Abogado y gestor de proyectos (Scrum) con perfil técnico. Construyo <strong>MonolithOS</strong>: una PMO de una persona que instala sistemas de gestión con IA en empresas dirigidas por su dueño. Un solo tablero, reglas escritas y un asistente que hace la ronda. El cliente cero es la propia MonolithOS (ocho unidades de negocio, cada una con su responsable).</p>
-          <p class="texto">Antes: litigio civil y mercantil en Caracas. Ahora: teletrabajo 05:00–13:00 para inmobiliaria de Madrid + MonolithOS en horarios restantes. Meta: 1.000 USD/mes netos de la actividad aparte del sueldo.</p>
+          <p class="texto">Antes: <strong>20+ años en recobros, gestión de morosidad y sector inmobiliario/condominial</strong> (Fineconómica, 2013–actualidad). Redujo cartera de morosidad del 70% al 10%. Ahora: teletrabajo 05:00–13:00 para inmobiliaria de Madrid + MonolithOS en horarios restantes. Meta: 1.000 USD/mes netos de la actividad aparte del sueldo. Ciudadanía italiana / UE.</p>
         </section>
 
         <section aria-labelledby="roles-titulo">
@@ -180,12 +172,16 @@ h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
               <tr><th>Periodo</th><th>Cargo / Proyecto</th><th>Qué se hizo</th></tr>
             </thead>
             <tbody>
-              <tr><td class="pendiente">[DATO PENDIENTE: fecha inicio] – [DATO PENDIENTE: fecha fin]</td><td>Abogado asociado / litigante</td><td class="pendiente">[DATO PENDIENTE: firma o juzgado, tipo de causas]</td></tr>
-              <tr><td class="pendiente">[DATO PENDIENTE: fecha inicio] – presente</td><td>Fundador, MonolithOS</td><td>Diseño del método 4D (fusiona 4D de Fluidez en IA + 4D de Producto IA), arquitectura del asistente Hermes, instalación en 8 unidades internas.</td></tr>
-              <tr><td class="pendiente">[DATO PENDIENTE: fecha inicio] – presente</td><td>Product Owner, IAmazing Content</td><td>Agencia de contenido con IA (5 mercados M1–M5). Transición a María Victoria como dueña operativa (2026-11-06).</td></tr>
-              <tr><td class="pendiente">[DATO PENDIENTE: fecha inicio] – presente</td><td>Editor / Pipeline, Rigoberto Hidalgo</td><td>Pipeline de edición de prédicas: estilo D, sin subtítulos, versículos RVR1960, máster 1080p −15 LUFS.</td></tr>
-              <tr><td class="pendiente">[DATO PENDIENTE: fecha inicio] – presente</td><td>Socio técnico, Talgidi Codes</td><td>Software de gestión de condominios (Carlos Matei, D'Angelo). Marco aprueba gasto y dirección.</td></tr>
-              <tr><td class="pendiente">[DATO PENDIENTE: fecha inicio] – presente</td><td>Socio, Fineconómica</td><td>Asesoría y cobranza de condominios (Dra. Beda Sánchez, madre; Marco socio sin cobro).</td></tr>
+              <tr><td>2013 – presente</td><td><strong>Ejecutivo de Cobranzas Legales / Gestión Jurídico-Operativa</strong> · Fineconómica, C.A.</td><td>Gestión integral de recobros, morosidad y expedientes jurídico-inmobiliarios. Negociación directa de deudas, convenios de pago, recuperación de posesión. Urbanizaciones +400 unidades. <strong>Resultado: morosidad 70% → 10%; ~40.000 USD/año recuperados</strong>.</td></tr>
+              <tr><td>2009 – 2012</td><td>Cobranzas / Asistencia a Administraciones de Condominio · Fineconómica, C.A.</td><td>Gestión para administradoras (Arco's, Datahouse, SIACA). Convenios, mediación propietario–inquilino, coordinación con abogados externos.</td></tr>
+              <tr><td>2008</td><td>Agente de Recuperación de Crédito · REVENCRED</td><td>Recuperación telefónica, negociación con morosos, escalamiento a instancias jurídicas.</td></tr>
+              <tr><td>2007</td><td>Agente de Cobranzas Telefónicas · SOMERCA</td><td>Cobranza para entidades bancarias y cadenas comerciales: tarjetas, obligaciones vencidas, alternativas de pago.</td></tr>
+              <tr><td>2026 – presente</td><td>Colaborador / Asesor de Producto · CONDOVE</td><td>Solución tecnológica para organización y gestión operativa de comunidades de propietarios.</td></tr>
+              <tr><td>2024 – presente</td><td>Fundador, MonolithOS</td><td>Diseño del método 4D, arquitectura del asistente Hermes, instalación en 8 unidades internas.</td></tr>
+              <tr><td>2024 – presente</td><td>Product Owner, IAmazing Content</td><td>Agencia de contenido con IA (5 mercados M1–M5). Transición a María Victoria como dueña operativa (2026-11-06).</td></tr>
+              <tr><td>2024 – presente</td><td>Editor / Pipeline, Rigoberto Hidalgo</td><td>Pipeline de edición de prédicas: estilo D, sin subtítulos, versículos RVR1960, máster 1080p −15 LUFS.</td></tr>
+              <tr><td>2024 – presente</td><td>Socio técnico, Talgidi Codes</td><td>Software de gestión de condominios (Carlos Matei, D'Angelo). Marco aprueba gasto y dirección.</td></tr>
+              <tr><td>2013 – presente</td><td>Socio, Fineconómica</td><td>Asesoría y cobranza de condominios (Dra. Beda Sánchez, madre; Marco socio sin cobro).</td></tr>
             </tbody>
           </table>
         </section>
@@ -197,10 +193,11 @@ h3{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.25}
               <tr><th>Título / Certificado</th><th>Institución</th><th>Año</th><th>Estado</th></tr>
             </thead>
             <tbody>
-              <tr><td>Abogado</td><td class="pendiente">[DATO PENDIENTE: nombre universidad]</td><td class="pendiente">[DATO PENDIENTE: año]</td><td class="pendiente">[DATO PENDIENTE: título profesional / número de colegiatura]</td></tr>
-              <tr><td>Certificación Scrum / Agile</td><td class="pendiente">[DATO PENDIENTE: certificadora]</td><td class="pendiente">[DATO PENDIENTE: año]</td><td class="pendiente">[DATO PENDIENTE: nivel]</td></tr>
-              <tr><td>Certificación IA Fluency (Anthropic)</td><td class="pendiente">Anthropic / [DATO PENDIENTE: programa exacto]</td><td class="pendiente">[DATO PENDIENTE: año]</td><td class="pendiente"><strong>Pendiente de confirmar nombre exacto del certificado</strong> (no escribir "certificado por Anthropic" sin confirmar)</td></tr>
-              <tr><td class="pendiente" colspan="4">[DATO PENDIENTE: otros cursos, diplomados, especializaciones]</td></tr>
+              <tr><td>Abogado</td><td>Universidad Central de Venezuela (UCV)</td><td>2016</td><td>Título profesional · <span class="pendiente">[DATO PENDIENTE: número de colegiatura]</span></td></tr>
+              <tr><td>Certificación Scrum / Agile</td><td class="pendiente">[DATO PENDIENTE: certificadora]</td><td class="pendiente">[DATO PENDIENTE: año]</td><td class="pendiente">[DATO PENDIENTE: nivel, ej. PSM I, CSM] (el CV dice "Project Management")</td></tr>
+              <tr><td>Certificación IA Fluency (Anthropic)</td><td>Anthropic / <strong>AI Fluency (14 certificados)</strong></td><td>2024</td><td><strong>Nombre exacto pendiente</strong>: "AI Fluency · Anthropic (14 certificados)" — confirmar nombre oficial del programa</td></tr>
+              <tr><td>Ciberseguridad</td><td class="pendiente">[DATO PENDIENTE: certificadora]</td><td>2024</td><td>2 certificaciones</td></tr>
+              <tr><td>Seminario Derecho e IA</td><td>Universidad Central de Venezuela (UCV)</td><td>En curso</td><td></td></tr>
             </tbody>
           </table>
         </section>

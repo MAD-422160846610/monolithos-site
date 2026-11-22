@@ -1,0 +1,68 @@
+/* MonolithOS · sistema visual compartido v1 (21-nov-2026)
+ * Fuente única de color, letra, espacio y movimiento para La Oficina y el sitio monoglith.online.
+ * Original: marca/sistema-visual/tokens.css en la bóveda. Copias idénticas en
+ *   oficina/tokens.css  y  sitio-monolithos/web/v1/recursos/tokens.css
+ * Si cambias algo aquí, copia el archivo a los dos sitios (DESIGN.md explica cómo).
+ * Valores de la marca v1 aprobada el 17-nov («Código & Granito»). Reglas de oficio: hallmark (nutlope/hallmark). */
+:root {
+  /* Color: modo claro */
+  --piedra: #F8F9FA;      /* fondo de página */
+  --cantera: #EDEFF2;     /* segundo neutro: barras, columnas, paneles */
+  --papel: #FFFFFF;       /* superficies que se leen: fichas, formularios */
+  --tinta: #0B0E14;       /* texto y bordes fuertes */
+  --gris: #3E4C59;        /* texto secundario (7.9:1 sobre piedra) */
+  --veta: #D3D9E0;        /* filetes de 1 px */
+  --ambar: #D97706;       /* la única señal: acción principal y lo que espera tu decisión */
+  --sobre-ambar: #0B0E14; /* texto sobre ámbar */
+  --senal: #047857;       /* hecho, conectado */
+  --senal-fondo: #DCF2E8;
+  --decide: #9A5200;      /* texto de "decide el dueño" */
+  --decide-fondo: #FBEFD9;
+  --error: #B42318;
+  --error-fondo: #FDECEA;
+  --vidrio: rgba(248, 249, 250, .78);
+  --foco: var(--tinta);
+
+  /* Letra: los cuatro roles de la marca. Newsreader solo para el lema. */
+  --display: "Space Grotesk", Arial, system-ui, sans-serif;
+  --texto: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --serif: "Newsreader", Georgia, serif;
+
+  /* Escala de letra (app 1.2; el sitio agranda los titulares con clamp) */
+  --t-11: 11px; --t-13: 13px; --t-15: 15px; --t-17: 17px; --t-20: 20px; --t-24: 24px; --t-28: 28px;
+
+  /* Espacio: rejilla de 4 px */
+  --e-1: 4px; --e-2: 8px; --e-3: 12px; --e-4: 16px; --e-5: 20px; --e-6: 24px; --e-8: 32px; --e-10: 40px; --e-12: 48px; --e-16: 64px;
+
+  /* Forma: esquinas rectas, sin sombras, sin degradados (regla de marca) */
+  --r: 0px;
+  --filete: 1px;
+  --sombra: none;
+
+  /* Movimiento: breve, solo transform/opacity/color */
+  --dur-micro: 120ms; --dur-corta: 200ms;
+  --curva: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Controles */
+  --alto-control: 40px;   /* app */
+  --alto-toque: 44px;     /* zona mínima de toque */
+  --alto-boton-web: 48px; /* sitio */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --piedra: #0B0E14; --cantera: #11161D; --papel: #151A22; --tinta: #F8F9FA; --gris: #94A3B8; --veta: #2A3340;
+    --senal: #34D399; --senal-fondo: #0B2A1F; --decide: #F0A43C; --decide-fondo: #2C1F0A;
+    --error: #F97066; --error-fondo: #2D1210;
+    --vidrio: rgba(11, 14, 20, .78);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --piedra: #0B0E14; --cantera: #11161D; --papel: #151A22; --tinta: #F8F9FA; --gris: #94A3B8; --veta: #2A3340;
+  --senal: #34D399; --senal-fondo: #0B2A1F; --decide: #F0A43C; --decide-fondo: #2C1F0A;
+  --error: #F97066; --error-fondo: #2D1210;
+  --vidrio: rgba(11, 14, 20, .78);
+  color-scheme: dark;
+}

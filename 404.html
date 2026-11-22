@@ -13,28 +13,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@1,400&display=swap">
+  <link rel="stylesheet" href="/recursos/tokens.css">
   <style>
-:root{
-  --piedra:#F8F9FA; --cantera:#EDEFF2; --papel:#FFFFFF; --tinta:#0B0E14; --gris:#3E4C59; --veta:#D3D9E0; --ambar:#D97706; --sobre-ambar:#0B0E14;
-  --senal:#047857; --senal-fondo:#DCF2E8; --decide:#9A5200; --decide-fondo:#FBEFD9;
-  --vidrio:rgba(248,249,250,.78);
-  --display:"Space Grotesk",Arial,system-ui,sans-serif;
-  --texto:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace; --serif:"Newsreader",Georgia,serif;
-  --r:0px; --gut:20px; --alto-cab:56px;
-}
+/* Hallmark · shape: kept · genre: modern-minimal · theme: brand · redesign: polish
+ * paper: #F8F9FA piedra · accent: #D97706 ambar · display: Space Grotesk · body: Inter
+ * nav: kept · signature: kept · states: kept
+ * axes: light/grotesk/amber · posture: kept · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V3 · weakest: S, página secundaria; hereda el sistema compartido de DESIGN.md sin cambiar su contenido */
+/* Hallmark · dismissed 29 · el vidrio vive solo en la cabecera, la regla de apple-design-skill que Marco pidió para el sitio */
+:root{--gut:20px; --alto-cab:56px}
 @media (min-width:700px){:root{--gut:32px; --alto-cab:64px}}
 @media (min-width:1100px){:root{--gut:clamp(40px,4.4vw,64px)}}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
-  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
-  --vidrio:rgba(11,14,20,.78); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --piedra:#0B0E14; --cantera:#11161D; --papel:#151A22; --tinta:#F8F9FA; --gris:#94A3B8; --veta:#2A3340;
-  --senal:#34D399; --senal-fondo:#0B2A1F; --decide:#F0A43C; --decide-fondo:#2C1F0A;
-  --vidrio:rgba(11,14,20,.78); color-scheme:dark}
 
 *{box-sizing:border-box}
+html,body{overflow-x:clip}
+.boton:disabled,.boton[aria-disabled="true"]{opacity:.45;cursor:not-allowed}
 html{scroll-padding-top:calc(var(--alto-cab) + 16px);-webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
 body{margin:0;background:var(--piedra);color:var(--tinta);font-family:var(--texto);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -46,10 +39,10 @@ h1,h2,h3{margin:0;font-weight:inherit}
 p{text-wrap:pretty}
 .envoltura{width:100%;max-width:1280px;margin-inline:auto;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
 :focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
-.saltar{position:absolute;left:12px;top:-80px;z-index:100;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--tinta);color:var(--piedra);font-family:var(--mono);font-size:13px;text-decoration:none}
+.saltar{position:absolute;left:12px;top:-80px;z-index:100;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--tinta);color:var(--piedra);font-family:var(--texto);font-size:13px;text-decoration:none}
 .saltar:focus{top:12px}
 
-.boton{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:var(--r);border:1px solid var(--tinta);background:transparent;color:var(--tinta);font-family:var(--texto);font-weight:600;font-size:16px;line-height:1.2;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s ease,opacity .1s ease}
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;border-radius:var(--r);border:1px solid var(--tinta);background:transparent;color:var(--tinta);font-family:var(--texto);font-weight:600;font-size:16px;line-height:1.2;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s ease,opacity .1s ease}
 .boton:active{opacity:.72}
 .boton.lleno{background:var(--ambar);border-color:var(--ambar);color:var(--sobre-ambar)}
 .boton.chico{min-height:44px;padding:0 16px;font-size:15px}
@@ -72,13 +65,13 @@ p{text-wrap:pretty}
   .marca svg{height:28px}
   .menu{display:flex;position:static;flex-direction:row;align-items:center;gap:2px;background:none;border:0;padding:0}
   .menu a:not(.boton){display:inline-flex;min-height:44px;padding:0 12px;font-size:15px;border-bottom:0}
-  .menu .boton{margin:0 0 0 10px;min-height:44px;font-size:15px}
+  .menu .boton{margin:0 0 0 8px;min-height:44px;font-size:15px}
 }
 @media (min-width:960px) and (hover:hover){.menu a:not(.boton):hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}}
 
 h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10.2vw,60px);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
 
-.pie{border-top:1px solid var(--veta);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-family:var(--mono);font-size:12px;color:var(--gris)}
+.pie{border-top:1px solid var(--veta);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));font-family:var(--texto);font-size:12px;color:var(--gris)}
 .pie-fila{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
 
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
@@ -106,7 +99,7 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10.2vw,60px);
       <div class="envoltura">
         <h1>Esta página no existe.</h1>
         <p class="entrada" style="margin-top: 16px; max-width: 40ch; margin-inline: auto;">Lo sentimos, la página que buscas no se encuentra.</p>
-        <a class="boton lleno" href="/" style="margin-top: 24px; display: inline-flex;">Volver al inicio <span class="flecha" aria-hidden="true">→</span></a>
+        <a class="boton lleno" href="/" style="margin-top: 24px; display: inline-flex;">Volver al inicio</a>
       </div>
     </section>
   </main>
